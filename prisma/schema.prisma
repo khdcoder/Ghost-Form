@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Form {
+  id          String         @id @default(uuid())
+  slug        String         @unique 
+  createdAt   DateTime       @default(now())
+  submissions Submission[]
+}
+
+model Submission {
+  id        String   @id @default(uuid())
+  formId    String
+  form      Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+  data      Json     
+  ipAddress String?
+  createdAt DateTime @default(now())
+}
