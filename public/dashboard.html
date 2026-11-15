@@ -132,6 +132,131 @@
       margin-bottom: 4px;
     }
 
+    /* NEW: Integration Guide Section */
+    .integration-guide {
+      margin-top: 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .integration-header {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s ease;
+    }
+    .integration-header:hover { background: linear-gradient(135deg, #f1f5f9, #e2e8f0); }
+    .integration-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .integration-icon {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      color: white;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    .toggle-arrow {
+      transition: transform 0.3s ease;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+    .integration-guide.active .toggle-arrow { transform: rotate(180deg); }
+    
+    .integration-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .integration-guide.active .integration-content { max-height: 600px; }
+    
+    .integration-body {
+      padding: 20px;
+      background: white;
+    }
+    .integration-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 0 0 16px 0;
+      line-height: 1.6;
+    }
+    .code-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .code-tab {
+      padding: 8px 16px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .code-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+    .code-block {
+      position: relative;
+      background: #1e293b;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .code-content {
+      padding: 18px 20px;
+      padding-right: 80px;
+      overflow-x: auto;
+    }
+    .code-content pre {
+      margin: 0;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #e2e8f0;
+      white-space: pre;
+    }
+    .code-content .tag { color: #f472b6; }
+    .code-content .attr { color: #fbbf24; }
+    .code-content .string { color: #34d399; }
+    .code-content .keyword { color: #60a5fa; }
+    .code-copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .code-copy-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
     /* Table Card */
     .card {
       background: var(--card-bg);
@@ -173,15 +298,6 @@
       border-radius: 20px;
       font-size: 12px;
       font-weight: 600;
-    }
-    .badge-count {
-      background: #eef2ff;
-      color: var(--primary);
-      padding: 2px 8px;
-      border-radius: 10px;
-      font-size: 11px;
-      font-weight: 700;
-      margin-left: 6px;
     }
 
     /* Modal */
@@ -269,7 +385,7 @@
   <div class="container">
     <div class="header">
       <div class="brand">
-        <img src="/images/ghostform.png" alt="Logo" class="brand-logo">
+        <img src="images/ghostform.png" alt="Logo" class="brand-logo">
         <div>
           <h1>Dashboard</h1>
           <span class="subtitle">Manage all your forms and submissions</span>
@@ -290,12 +406,41 @@
         </select>
         <button class="btn btn-outline btn-sm" onclick="exportToCSV()">📥 Export CSV</button>
       </div>
+      
       <div class="endpoint-box" id="endpointBox" style="display: none;">
         <div style="flex: 1;">
           <div class="endpoint-label">Your Form Endpoint</div>
           <div class="endpoint-url" id="endpointUrl">-</div>
         </div>
         <button class="btn btn-sm" onclick="copyEndpoint()">📋 Copy</button>
+      </div>
+
+      <!-- NEW: Integration Guide -->
+      <div class="integration-guide" id="integrationGuide" style="display: none;">
+        <div class="integration-header" onclick="toggleIntegration()">
+          <div class="integration-title">
+            <div class="integration-icon">⚡</div>
+            <span>Integration Guide — How to use this form</span>
+          </div>
+          <span class="toggle-arrow">▼</span>
+        </div>
+        <div class="integration-content">
+          <div class="integration-body">
+            <p class="integration-desc">
+              Copy the code below and paste it into your website's HTML file. Replace the form fields with your own inputs.
+            </p>
+            <div class="code-tabs">
+              <button class="code-tab active" onclick="switchTab('html', this)">HTML Form</button>
+              <button class="code-tab" onclick="switchTab('js', this)">JavaScript (Fetch)</button>
+            </div>
+            <div class="code-block">
+              <button class="code-copy-btn" onclick="copyCode()">📋 Copy</button>
+              <div class="code-content">
+                <pre id="codeDisplay"></pre>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -344,6 +489,50 @@
     let allForms = [];
     let submissionsData = [];
     let currentSlug = '';
+    let currentTab = 'html';
+
+    // Code snippets for both tabs
+    function getHtmlCode(endpoint) {
+      return `<span class="tag">&lt;form</span> <span class="attr">action</span>=<span class="string">"${endpoint}"</span> <span class="attr">method</span>=<span class="string">"POST"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">placeholder</span>=<span class="string">"Your Name"</span> <span class="attr">required</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="string">"email"</span> <span class="attr">name</span>=<span class="string">"email"</span> <span class="attr">placeholder</span>=<span class="string">"Your Email"</span> <span class="attr">required</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;textarea</span> <span class="attr">name</span>=<span class="string">"message"</span> <span class="attr">placeholder</span>=<span class="string">"Your Message"</span><span class="tag">&gt;&lt;/textarea&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="string">"submit"</span><span class="tag">&gt;</span>Send<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span>`;
+    }
+
+    function getJsCode(endpoint) {
+      return `<span class="keyword">const</span> response = <span class="keyword">await</span> <span class="keyword">fetch</span>(<span class="string">"${endpoint}"</span>, {
+  <span class="attr">method</span>: <span class="string">'POST'</span>,
+  <span class="attr">headers</span>: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
+  <span class="attr">body</span>: <span class="keyword">JSON</span>.<span class="keyword">stringify</span>({
+    <span class="attr">name</span>: <span class="string">'John Doe'</span>,
+    <span class="attr">email</span>: <span class="string">'john@example.com'</span>,
+    <span class="attr">message</span>: <span class="string">'Hello Ghost Form!'</span>
+  })
+});`;
+    }
+
+    function getPlainHtmlCode(endpoint) {
+      return `<form action="${endpoint}" method="POST">
+  <input type="text" name="name" placeholder="Your Name" required>
+  <input type="email" name="email" placeholder="Your Email" required>
+  <textarea name="message" placeholder="Your Message"></textarea>
+  <button type="submit">Send</button>
+</form>`;
+    }
+
+    function getPlainJsCode(endpoint) {
+      return `const response = await fetch("${endpoint}", {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    name: 'John Doe',
+    email: 'john@example.com',
+    message: 'Hello Ghost Form!'
+  })
+});`;
+    }
 
     // Load all forms on page load
     async function loadForms() {
@@ -370,7 +559,6 @@
           selector.appendChild(opt);
         });
 
-        // Auto-select first form
         currentSlug = allForms[0].slug;
         selector.value = currentSlug;
         updateEndpointDisplay();
@@ -382,13 +570,35 @@
 
     function updateEndpointDisplay() {
       const box = document.getElementById('endpointBox');
+      const guide = document.getElementById('integrationGuide');
       const url = document.getElementById('endpointUrl');
       if (currentSlug) {
-        url.textContent = `${window.location.origin}/api/submit/${currentSlug}`;
+        const endpoint = `${window.location.origin}/api/submit/${currentSlug}`;
+        url.textContent = endpoint;
         box.style.display = 'flex';
+        guide.style.display = 'block';
+        updateCodeDisplay();
       } else {
         box.style.display = 'none';
+        guide.style.display = 'none';
       }
+    }
+
+    function updateCodeDisplay() {
+      const endpoint = `${window.location.origin}/api/submit/${currentSlug}`;
+      const codeDisplay = document.getElementById('codeDisplay');
+      codeDisplay.innerHTML = currentTab === 'html' ? getHtmlCode(endpoint) : getJsCode(endpoint);
+    }
+
+    function switchTab(tab, btn) {
+      currentTab = tab;
+      document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      updateCodeDisplay();
+    }
+
+    function toggleIntegration() {
+      document.getElementById('integrationGuide').classList.toggle('active');
     }
 
     function onFormChange() {
@@ -432,7 +642,6 @@
       }
     }
 
-    // Modal Controls
     function openModal() {
       document.getElementById('modal').classList.add('active');
       document.getElementById('slugInput').focus();
@@ -468,7 +677,7 @@
         if (data.success) {
           showToast('✅ Form created successfully!');
           closeModal();
-          loadForms(); // Reload forms list
+          loadForms();
         } else {
           showToast('❌ ' + (data.error || 'Failed to create form'));
         }
@@ -481,6 +690,14 @@
       const url = document.getElementById('endpointUrl').textContent;
       navigator.clipboard.writeText(url).then(() => {
         showToast('📋 Endpoint copied to clipboard!');
+      });
+    }
+
+    function copyCode() {
+      const endpoint = `${window.location.origin}/api/submit/${currentSlug}`;
+      const plainCode = currentTab === 'html' ? getPlainHtmlCode(endpoint) : getPlainJsCode(endpoint);
+      navigator.clipboard.writeText(plainCode).then(() => {
+        showToast('📋 Code copied to clipboard!');
       });
     }
 
@@ -517,12 +734,10 @@
       showToast('📥 CSV downloaded!');
     }
 
-    // Close modal on overlay click
     document.getElementById('modal').addEventListener('click', (e) => {
       if (e.target.id === 'modal') closeModal();
     });
 
-    // Initialize
     loadForms();
   </script>
 </body>
