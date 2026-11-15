@@ -42,7 +42,6 @@ Built with a focus on **developer experience** and **data privacy**, it features
 
 ## 📸 Screenshots
 
-*(Note: Replace these placeholder images with actual screenshots of your project)*
 
 ### 📝 Form Submission Page
 <img width="1348" height="636" alt="image" src="https://github.com/user-attachments/assets/3c824867-2be5-43b4-9498-c779aa54ac32" />
@@ -50,7 +49,7 @@ Built with a focus on **developer experience** and **data privacy**, it features
 *A clean, modern form ready to be embedded in any static website.*
 
 ### 📊 Admin Dashboard
-<img width="1347" height="632" alt="image" src="https://github.com/user-attachments/assets/3ff14193-515c-4c43-9637-9d7ca27785f6" />
+<img width="1349" height="635" alt="image" src="https://github.com/user-attachments/assets/2801a9af-3f67-4095-8eec-89f78ee6050f" />
 
 *View, manage, and export your submissions with a single click.*
 
