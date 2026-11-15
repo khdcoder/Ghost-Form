@@ -13,8 +13,10 @@
       --text-main: #1e293b;
       --text-muted: #64748b;
       --border-color: #e2e8f0;
+      --success: #10b981;
       --radius: 16px;
     }
+    * { box-sizing: border-box; }
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background: var(--bg-color);
@@ -23,10 +25,8 @@
       padding: 40px 24px;
       min-height: 100vh;
     }
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
+    .container { max-width: 1000px; margin: 0 auto; }
+    
     .header {
       display: flex;
       align-items: center;
@@ -35,13 +35,10 @@
       flex-wrap: wrap;
       gap: 16px;
     }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .brand { display: flex; align-items: center; gap: 12px; }
     .brand-logo { width: 40px; height: 40px; object-fit: contain; }
     h1 { margin: 0; font-size: 24px; font-weight: 700; }
+    .subtitle { font-size: 14px; color: var(--text-muted); }
     
     .btn {
       padding: 12px 24px;
@@ -57,6 +54,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      font-family: inherit;
     }
     .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25); }
     .btn-outline {
@@ -65,15 +63,82 @@
       color: var(--text-main);
     }
     .btn-outline:hover { background: #f1f5f9; box-shadow: none; }
+    .btn-sm { padding: 8px 16px; font-size: 13px; }
 
+    /* Form Selector Card */
+    .selector-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+      margin-bottom: 24px;
+    }
+    .selector-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .selector-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-right: 8px;
+    }
+    select {
+      flex: 1;
+      min-width: 200px;
+      padding: 12px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: inherit;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+    
+    /* Endpoint Display */
+    .endpoint-box {
+      margin-top: 16px;
+      padding: 14px 18px;
+      background: #f8fafc;
+      border: 1px dashed var(--border-color);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .endpoint-url {
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: var(--text-main);
+      word-break: break-all;
+      flex: 1;
+    }
+    .endpoint-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    /* Table Card */
     .card {
       background: var(--card-bg);
       border-radius: var(--radius);
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
       overflow: hidden;
     }
-    
-    /* Table Styling */
     .table-container { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; }
     th {
@@ -91,7 +156,6 @@
       padding: 16px 24px;
       border-bottom: 1px solid var(--border-color);
       font-size: 14px;
-      color: var(--text-main);
     }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: #fafbfc; }
@@ -110,27 +174,135 @@
       font-size: 12px;
       font-weight: 600;
     }
+    .badge-count {
+      background: #eef2ff;
+      color: var(--primary);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-left: 6px;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      padding: 24px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: white;
+      border-radius: var(--radius);
+      padding: 32px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .modal h2 { margin: 0 0 8px 0; font-size: 22px; }
+    .modal p { color: var(--text-muted); margin: 0 0 24px 0; font-size: 14px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+    .form-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 24px;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--text-main);
+      color: white;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      z-index: 200;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
       <div class="brand">
-        <img src="images/ghostform.png" alt="Logo" class="brand-logo">
+        <img src="/images/ghostform.png" alt="Logo" class="brand-logo">
         <div>
           <h1>Dashboard</h1>
-          <span style="font-size: 14px; color: var(--text-muted);">Form: test-ghost-form</span>
+          <span class="subtitle">Manage all your forms and submissions</span>
         </div>
       </div>
       <div style="display: flex; gap: 12px;">
-        <button class="btn btn-outline" onclick="exportToCSV()">📥 Export CSV</button>
-        <a href="/" class="btn btn-outline">← Back to Form</a>
+        <button class="btn" onclick="openModal()">✨ Create New Form</button>
+        <a href="/" class="btn btn-outline">← Back to Home</a>
       </div>
     </div>
 
+    <!-- Form Selector -->
+    <div class="selector-card">
+      <div class="selector-row">
+        <span class="selector-label">Select Form:</span>
+        <select id="formSelector" onchange="onFormChange()">
+          <option value="">Loading forms...</option>
+        </select>
+        <button class="btn btn-outline btn-sm" onclick="exportToCSV()">📥 Export CSV</button>
+      </div>
+      <div class="endpoint-box" id="endpointBox" style="display: none;">
+        <div style="flex: 1;">
+          <div class="endpoint-label">Your Form Endpoint</div>
+          <div class="endpoint-url" id="endpointUrl">-</div>
+        </div>
+        <button class="btn btn-sm" onclick="copyEndpoint()">📋 Copy</button>
+      </div>
+    </div>
+
+    <!-- Submissions Table -->
     <div class="card">
       <div class="table-container">
-        <table id="submissionsTable">
+        <table>
           <thead>
             <tr>
               <th>Date</th>
@@ -141,38 +313,110 @@
             </tr>
           </thead>
           <tbody id="tableBody">
-            <tr>
-              <td colspan="5" class="empty-state">Loading submissions...</td>
-            </tr>
+            <tr><td colspan="5" class="empty-state">Loading...</td></tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <script>
-    const FORM_SLUG = 'test-ghost-form';
-    let submissionsData = [];
+  <!-- Create Form Modal -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <h2>✨ Create New Form</h2>
+      <p>Give your form a unique slug. This will generate a unique endpoint URL.</p>
+      <div class="form-group">
+        <label for="slugInput">Form Slug</label>
+        <input type="text" id="slugInput" placeholder="e.g., contact-us, newsletter-signup" oninput="formatSlug(this)">
+        <div class="form-hint">Only lowercase letters, numbers, and hyphens allowed.</div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+        <button class="btn" onclick="createForm()">Create Form</button>
+      </div>
+    </div>
+  </div>
 
-    async function loadSubmissions() {
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">Copied!</div>
+
+  <script>
+    let allForms = [];
+    let submissionsData = [];
+    let currentSlug = '';
+
+    // Load all forms on page load
+    async function loadForms() {
       try {
-        const res = await fetch(`http://localhost:3000/api/submissions/${FORM_SLUG}`);
+        const res = await fetch('/api/forms');
         const data = await res.json();
         
-        const tbody = document.getElementById('tableBody');
-        tbody.innerHTML = '';
+        if (!data.success) throw new Error('Failed to load forms');
+        
+        allForms = data.forms;
+        const selector = document.getElementById('formSelector');
+        selector.innerHTML = '';
 
+        if (allForms.length === 0) {
+          selector.innerHTML = '<option value="">No forms yet. Create one!</option>';
+          document.getElementById('tableBody').innerHTML = `<tr><td colspan="5" class="empty-state">No forms created yet. Click "Create New Form" to get started!</td></tr>`;
+          return;
+        }
+
+        allForms.forEach(form => {
+          const opt = document.createElement('option');
+          opt.value = form.slug;
+          opt.textContent = `${form.slug} (${form._count.submissions} submissions)`;
+          selector.appendChild(opt);
+        });
+
+        // Auto-select first form
+        currentSlug = allForms[0].slug;
+        selector.value = currentSlug;
+        updateEndpointDisplay();
+        loadSubmissions(currentSlug);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function updateEndpointDisplay() {
+      const box = document.getElementById('endpointBox');
+      const url = document.getElementById('endpointUrl');
+      if (currentSlug) {
+        url.textContent = `${window.location.origin}/api/submit/${currentSlug}`;
+        box.style.display = 'flex';
+      } else {
+        box.style.display = 'none';
+      }
+    }
+
+    function onFormChange() {
+      currentSlug = document.getElementById('formSelector').value;
+      updateEndpointDisplay();
+      if (currentSlug) loadSubmissions(currentSlug);
+    }
+
+    async function loadSubmissions(slug) {
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Loading submissions...</td></tr>';
+      
+      try {
+        const res = await fetch(`/api/submissions/${slug}`);
+        const data = await res.json();
+        
         if (!data.success || data.submissions.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5" class="empty-state">No submissions found yet. Try submitting the form first!</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="5" class="empty-state">No submissions yet for this form. Share the endpoint URL to start receiving data!</td></tr>`;
+          submissionsData = [];
           return;
         }
 
         submissionsData = data.submissions;
+        tbody.innerHTML = '';
 
         submissionsData.forEach(sub => {
           const date = new Date(sub.createdAt).toLocaleString();
-          const rowData = sub.data; // JSON data from form
-          
+          const rowData = sub.data;
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td style="color: var(--text-muted); font-size: 13px;">${date}</td>
@@ -184,43 +428,102 @@
           tbody.appendChild(tr);
         });
       } catch (err) {
-        document.getElementById('tableBody').innerHTML = `<tr><td colspan="5" class="empty-state" style="color: #ef4444;">Error loading data. Is the server running?</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="empty-state" style="color: #ef4444;">Error loading data.</td></tr>`;
       }
     }
 
+    // Modal Controls
+    function openModal() {
+      document.getElementById('modal').classList.add('active');
+      document.getElementById('slugInput').focus();
+    }
+    function closeModal() {
+      document.getElementById('modal').classList.remove('active');
+      document.getElementById('slugInput').value = '';
+    }
+
+    function formatSlug(input) {
+      input.value = input.value
+        .toLowerCase()
+        .replace(/[^a-z0-9-]/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
+    }
+
+    async function createForm() {
+      const slug = document.getElementById('slugInput').value.trim();
+      if (!slug) {
+        showToast('Please enter a slug!');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/forms', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          showToast('✅ Form created successfully!');
+          closeModal();
+          loadForms(); // Reload forms list
+        } else {
+          showToast('❌ ' + (data.error || 'Failed to create form'));
+        }
+      } catch (err) {
+        showToast('❌ Error creating form');
+      }
+    }
+
+    function copyEndpoint() {
+      const url = document.getElementById('endpointUrl').textContent;
+      navigator.clipboard.writeText(url).then(() => {
+        showToast('📋 Endpoint copied to clipboard!');
+      });
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
     function exportToCSV() {
-      if (submissionsData.length === 0) {
-        alert("No data to export!");
+      if (!currentSlug || submissionsData.length === 0) {
+        showToast('No data to export!');
         return;
       }
       
-      // CSV Header
       let csvContent = "Date,Name,Email,Message,IP Address\n";
-      
-      // CSV Rows
       submissionsData.forEach(sub => {
         const date = new Date(sub.createdAt).toLocaleString().replace(/,/g, '');
         const name = (sub.data.name || '').replace(/,/g, ' ');
         const email = sub.data.email || '';
         const message = (sub.data.message || '').replace(/,/g, ' ').replace(/\n/g, ' ');
         const ip = sub.ipAddress || 'Unknown';
-        
-        csvContent += `${date},${name},${email},${message},${ip}\n`;
+        csvContent += `${date},"${name}","${email}","${message}","${ip}"\n`;
       });
 
-      // Download Trigger
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement("a");
-      const url = URL.createObjectURL(blob);
-      link.setAttribute("href", url);
-      link.setAttribute("download", `ghost-form-submissions-${FORM_SLUG}.csv`);
+      link.setAttribute("href", URL.createObjectURL(blob));
+      link.setAttribute("download", `ghost-form-${currentSlug}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      showToast('📥 CSV downloaded!');
     }
 
-    // Load data on page load
-    loadSubmissions();
+    // Close modal on overlay click
+    document.getElementById('modal').addEventListener('click', (e) => {
+      if (e.target.id === 'modal') closeModal();
+    });
+
+    // Initialize
+    loadForms();
   </script>
 </body>
 </html>
