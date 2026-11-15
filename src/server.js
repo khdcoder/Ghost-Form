@@ -53,6 +53,17 @@ app.get('/api/submissions/:slug', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-
+// 4. Get all forms (for dashboard dropdown)
+app.get('/api/forms', async (req, res) => {
+  try {
+    const forms = await prisma.form.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: { _count: { select: { submissions: true } } }
+    });
+    res.json({ success: true, forms });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`👻 Ghost Form running on http://localhost:${PORT}`));
